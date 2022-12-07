@@ -22,7 +22,7 @@ using System.Text;
     14. List Patterns
 */
 
-Console.WriteLine("Hello, World!");
+Output.WriteLine("Hello, World!");
 
 // 1. File-scoped types : "file" keyword
 // File-scoped access restricts a top-level type's
@@ -41,7 +41,7 @@ public static class FileScopedClasses
         // this type in a new file will fail.
         var jb = new JetBrains();
         
-        Console.WriteLine($"JetBrains is Awesome? {jb.IsAwesome}");
+        Output.WriteLine($"JetBrains is Awesome? {jb.IsAwesome}");
     }
 } 
 
@@ -60,7 +60,7 @@ public static class GenericMath
 
     public static void Execute()
     {
-        Console.WriteLine(Add(1f, 1f));
+        Output.WriteLine(Add(1f, 1f));
     }
 }
 
@@ -81,7 +81,7 @@ public static class StructWithoutNew
         // Property values set to the default
         // similar to class behaviors
         Coords p = new();
-        Console.WriteLine($"({p.X}, {p.Y})"); // output: (0, 0)
+        Output.WriteLine($"({p.X}, {p.Y})"); // output: (0, 0)
     }
 }
 
@@ -95,7 +95,7 @@ public static class PatternMatchingConstant
         ReadOnlySpan<char> name = "Khalid is Awesome";
 
         var result = name[10..17] is "Awesome";
-        Console.WriteLine($"Is Khalid Awesome? {result}");
+        Output.WriteLine($"Is Khalid Awesome? {result}");
     }
 }
 
@@ -107,7 +107,7 @@ public static class ExtendedNameOfScope
     [Display(Name = nameof(myFavoritePerson))]
     public static void Hello(string myFavoritePerson)
     {
-        Console.WriteLine($"Hello, {myFavoritePerson}");
+        Output.WriteLine($"Hello, {myFavoritePerson}");
     }
 
     public static void Execute()
@@ -115,7 +115,7 @@ public static class ExtendedNameOfScope
         var method = typeof(ExtendedNameOfScope).GetMethod(nameof(Hello), BindingFlags.Static | BindingFlags.Public);
         var attribute = method!.GetCustomAttribute<DisplayAttribute>();
 
-        Console.WriteLine($"The attribute name is \"{attribute!.Name}\"");
+        Output.WriteLine($"The attribute name is \"{attribute!.Name}\"");
     }
 }
 
@@ -144,7 +144,7 @@ public static class Utf8StringLiterals
         ReadOnlySpan<byte> utf8 = "<h1>Hello, World</h1>"u8;
         var html = Encoding.UTF8.GetString(utf8);
 
-        Console.WriteLine(html);
+        Output.WriteLine(html);
     }
 }
 
@@ -175,7 +175,7 @@ public static class RequiredMembers
             Name = "Khalid"
         };
 
-        Console.WriteLine(updated.Name);
+        Output.WriteLine(updated.Name);
     }
 }
 
@@ -211,7 +211,7 @@ public static class RawStringLiterals
         """;
 //👆 This whitespace before the """ will be trimmed
 
-        Console.WriteLine(html);
+        Output.WriteLine(html);
     }
 }
 
@@ -222,7 +222,7 @@ public static class MethodGroupConversion
     {
         var list = new List<int> { 1, 2, 3, 4, 5 };
 
-        var write = (int num) => Console.WriteLine(num);
+        var write = (int num) => Output.WriteLine(num);
         
         // Previously the method group would 
         // create a new delegate on every iteration
@@ -247,7 +247,7 @@ public static class GenericAttributes
     public static void Execute()
     {
         var attr = typeof(MyClass).GetCustomAttribute<MyAttribute<string>>();
-        Console.WriteLine(attr!.Kind);
+        Output.WriteLine(attr!.Kind);
     }
 }
 
@@ -262,7 +262,7 @@ public static class NewlinesInStringInterpolation
             (1/2) * 4
         }";
         
-        Console.WriteLine(test);
+        Output.WriteLine(test);
     }
 }
 
@@ -279,10 +279,26 @@ public static class ListPatterns
         var odd = new List<int> { 1, 3, 5 };
         var fib = new[] { 1, 1, 2, 3, 5 };
         
-        Console.WriteLine(odd is [1, .., 3, _]); // true
-        Console.WriteLine(fib is [1, .., 3, _]); // true
+        Output.WriteLine(odd is [1, .., 3, _]); // true
+        Output.WriteLine(fib is [1, .., 3, _]); // true
 
-        Console.WriteLine(odd is [1, _, 5, ..]); // true
-        Console.WriteLine(fib is [1, _, 5, ..]); // false
+        Output.WriteLine(odd is [1, _, 5, ..]); // true
+        Output.WriteLine(fib is [1, _, 5, ..]); // false
+    }
+}
+
+public static class Output
+{
+    private static bool FirstRun { get; set; } = true;
+    
+    public static void WriteLine(object value)
+    {
+        if (FirstRun)
+        {
+            Console.Clear();
+            FirstRun = false;
+        }
+        
+        Console.WriteLine(value);
     }
 }
